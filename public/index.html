@@ -35,22 +35,22 @@
             </div>
         </div>
         
-        <!-- ផ្ទាំងចុះឈ្មោះសមាជិកថ្មី (Register Form) -->
+        <!-- ផ្ទាំងចុះឈ្មោះសមាជិកថ្មី (Exness MT5 Connection) -->
         <div class="bg-slate-900/60 border border-slate-900 p-6 rounded-2xl shadow-xl">
-            <h2 class="text-lg font-semibold text-slate-300 mb-4 border-b border-slate-800 pb-2">📝 ចុះឈ្មោះគណនីត្រេដថ្មី (Exness MT5 Connection)</h2>
+            <h2 class="text-lg font-semibold text-slate-300 mb-4 border-b border-slate-800 pb-2">📝 ចុះឈ្មោះគណនីត្រេដថ្មី</h2>
             <div id="regConsole" class="hidden mb-4 p-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl text-xs"></div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm text-slate-400 mb-1">លេខគណនី Exness MT5 (Login ID)</label>
-                    <input type="text" id="accId" placeholder="ឧទាហរណ៍៖ 414063265" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-300 focus:outline-none">
+                    <input type="text" id="accId" value="105875038" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-300 focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-sm text-slate-400 mb-1">លេខសម្ងាត់ Exness (Trading Password)</label>
-                    <input type="password" id="password_mt5" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-300 focus:outline-none">
+                    <input type="password" id="password_mt5" value="Id168169$" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-300 focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-sm text-slate-400 mb-1">ម៉ាស៊ីនបម្រើ (Broker Server)</label>
-                    <input type="text" id="server" placeholder="ឧទាហរណ៍៖ Exness-MT5Trial6" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-300 focus:outline-none">
+                    <input type="text" id="server" value="Exness-MT5Real15" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-300 focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-sm text-slate-400 mb-1">Lot Size របស់ខ្លួនឯង</label>
@@ -70,14 +70,10 @@
             <button id="regBtn" onclick="registerAccount()" class="w-full mt-6 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-xl transition-all">🚀 ចុះឈ្មោះ និងតភ្ជាប់ទៅ Cloud</button>
         </div>
 
-        <!-- ផ្ទាំងពិនិត្យសមតុល្យលុយសមាជិក (Check Balance Panel) -->
+        <!-- ផ្ទាំងបង្ហាញសមតុល្យលុយ (Real-time Balance/Equity Panel) -->
         <div class="bg-slate-900/60 border border-slate-900 p-6 rounded-2xl shadow-xl">
-            <h2 class="text-lg font-semibold text-slate-300 mb-4 border-b border-slate-800 pb-2">📊 ពិនិត្យសមតុល្យគណនីផ្ទាល់ខ្លួន</h2>
-            <div class="flex gap-4">
-                <input type="text" id="checkAccId" placeholder="វាយបញ្ចូលលេខគណនី MT5 ID របស់អ្នក..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-300 focus:outline-none">
-                <button onclick="checkStatus()" class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-6 py-2 rounded-xl font-semibold">ស្កែនរក</button>
-            </div>
-            <div class="grid grid-cols-2 gap-4 mt-6">
+            <h2 class="text-lg font-semibold text-slate-300 mb-4 border-b border-slate-800 pb-2">📊 សមតុល្យគណនីបច្ចុប្បន្ន (Balance & Equity)</h2>
+            <div class="grid grid-cols-2 gap-4">
                 <div class="p-4 bg-slate-950 border border-slate-900 rounded-xl">
                     <p class="text-xs text-slate-500">សមតុល្យ (Balance)</p>
                     <h3 id="balVal" class="text-2xl font-bold text-slate-100">$0.00</h3>
@@ -116,18 +112,23 @@
             });
         }
         
-        // ដំណើរការស្កែនភ្លើងសញ្ញាទូទៅរៀងរាល់ ៥ វិនាទីម្តង
         fetchGeneralStatus();
         setInterval(fetchGeneralStatus, 5000);
 
         function registerAccount() {
             const regBtn = document.getElementById('regBtn');
             const regConsole = document.getElementById('regConsole');
+            const accLight = document.getElementById('accLight');
+            const accText = document.getElementById('accText');
             
             regBtn.innerText = "កំពុងផ្ទៀងផ្ទាត់ និងតភ្ជាប់ទៅ Exness... (សូមរង់ចាំ)";
             regBtn.disabled = true;
             regConsole.classList.remove('hidden');
             regConsole.innerText = "ប្រព័ន្ធកំពុងធ្វើការតភ្ជាប់ទៅកាន់ម៉ាស៊ីនមេ Exness ដើម្បីផ្ទៀងផ្ទាត់គណនីរបស់អ្នក...";
+            
+            accLight.className = "w-3.5 h-3.5 rounded-full bg-yellow-500 animate-pulse";
+            accText.innerText = "Exness Account: កំពុងតភ្ជាប់...";
+            accText.className = "text-xs text-yellow-500 font-semibold";
 
             const accId = document.getElementById('accId').value;
             const password_mt5 = document.getElementById('password_mt5').value;
@@ -148,11 +149,16 @@
                 if(data.success) {
                     regConsole.className = "mb-4 p-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl text-xs";
                     regConsole.innerText = data.message;
-                    document.getElementById('checkAccId').value = accId; // បំពេញប្រអប់ស្កែនដោយស្វ័យប្រវត្តិ
-                    checkStatus(); 
+                    
+                    // បង្ហាញសមតុល្យលុយពិតភ្លាមៗ
+                    document.getElementById('balVal').innerText = `$${parseFloat(data.balance).toFixed(2)}`;
+                    document.getElementById('eqVal').innerText = `$${parseFloat(data.equity).toFixed(2)}`;
+                    
+                    updateStatusLight('accLight', 'accText', 'Exness Account', true);
                 } else {
                     regConsole.className = "mb-4 p-3 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-xl text-xs";
                     regConsole.innerText = data.message;
+                    updateStatusLight('accLight', 'accText', 'Exness Account', false);
                 }
             })
             .catch(err => {
@@ -160,27 +166,6 @@
                 regBtn.disabled = false;
                 regConsole.className = "mb-4 p-3 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-xl text-xs";
                 regConsole.innerText = "កំហុសបច្ចេកទេស៖ ការតភ្ជាប់ទៅកាន់ Server របស់ Render មានបញ្ហា!";
-            });
-        }
-
-        function checkStatus() {
-            const accId = document.getElementById('checkAccId').value || document.getElementById('accId').value;
-            if(!accId) return;
-            
-            const accLight = document.getElementById('accLight');
-            const accText = document.getElementById('accText');
-            accLight.className = "w-3.5 h-3.5 rounded-full bg-yellow-500 animate-pulse";
-            accText.innerText = "Exness Account: កំពុងតភ្ជាប់...";
-            accText.className = "text-xs text-yellow-500 font-semibold";
-
-            fetch(`/api/status-account/${accId}`)
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('balVal').innerText = `$${parseFloat(data.balance).toFixed(2)}`;
-                document.getElementById('eqVal').innerText = `$${parseFloat(data.equity).toFixed(2)}`;
-                updateStatusLight('accLight', 'accText', 'Exness Account', data.account);
-            })
-            .catch(err => {
                 updateStatusLight('accLight', 'accText', 'Exness Account', false);
             });
         }
