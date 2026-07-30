@@ -9,20 +9,20 @@
     <style> 
         body { 
             font-family: 'Kantumruy Pro', sans-serif; 
-            background-color: #0b0e11; /* ពណ៌ខ្មៅក្រម៉ៅរបស់ Bybit */
+            background-color: #0b0e11; 
         } 
     </style>
 </head>
 <body class="text-[#e7ebed] min-h-screen flex flex-col justify-between">
     
-    <!-- Top Navigation (របារខាងលើបែប Bybit) -->
+    <!-- Top Navigation -->
     <header class="border-b border-[#2d3139] bg-[#12161a] py-3 px-6">
         <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-2">
                 <span class="text-[#ffb11a] text-xl font-bold tracking-wider">BYBIT</span>
                 <span class="text-slate-400 text-xs border-l border-slate-700 pl-2">CLOUD TERMINAL</span>
             </div>
-            <!-- ភ្លើងសញ្ញាតភ្ជាប់ទាំង ៣ បែបបង្រួមតូចសាមញ្ញ -->
+            <!-- ភ្លើងសញ្ញាតភ្ជាប់ទាំង ៣ -->
             <div class="flex flex-wrap gap-4 text-[11px] text-slate-400 font-mono">
                 <div class="flex items-center gap-1.5 bg-[#1e2329] px-2.5 py-1 rounded border border-[#2d3139]">
                     <span id="dbLight" class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></span>
@@ -58,9 +58,18 @@
                         <label class="block text-slate-400 mb-1">លេខសម្ងាត់ (Trading Password)</label>
                         <input type="password" id="password_mt5" value="Id168169$" class="w-full bg-[#1e2329] border border-[#2d3139] rounded px-3 py-2 text-slate-300 focus:outline-none focus:border-[#ffb11a] transition-all">
                     </div>
-                    <div>
-                        <label class="block text-slate-400 mb-1">ម៉ាស៊ីនបម្រើ (Broker Server)</label>
-                        <input type="text" id="server" value="Exness-MT5Real15" class="w-full bg-[#1e2329] border border-[#2d3139] rounded px-3 py-2 text-slate-300 focus:outline-none focus:border-[#ffb11a] transition-all">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-slate-400 mb-1">ប្រភេទប្រព័ន្ធ (Platform)</label>
+                            <select id="platform" class="w-full bg-[#1e2329] border border-[#2d3139] rounded px-2.5 py-2 text-slate-300 focus:outline-none focus:border-[#ffb11a]">
+                                <option value="mt5">MT5 (Default)</option>
+                                <option value="mt4">MT4 (Alternative)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">ម៉ាស៊ីនបម្រើ (Server)</label>
+                            <input type="text" id="server" value="Exness-MT5Real15" class="w-full bg-[#1e2329] border border-[#2d3139] rounded px-3 py-2 text-slate-300 focus:outline-none focus:border-[#ffb11a] transition-all">
+                        </div>
                     </div>
                 </div>
 
@@ -94,11 +103,10 @@
                 </button>
             </div>
 
-            <!-- ប្លុកសមតុល្យលុយពិត (Right Column - Balance) -->
+            <!-- ប្លុកសមតុល្យលុយពិត (Right Column) -->
             <div class="lg:col-span-2 bg-[#12161a] border border-[#2d3139] p-5 rounded-lg flex flex-col justify-between shadow-lg">
                 <h2 class="text-xs font-bold text-[#ffb11a] uppercase tracking-wider border-b border-[#2d3139] pb-2">📈 ACCOUNT OVERVIEW (REAL-TIME)</h2>
                 
-                <!-- តារាងសមតុល្យបែបសាមញ្ញ មុតស្រួច -->
                 <div class="grid grid-cols-2 gap-4 my-6">
                     <div class="bg-[#1e2329] p-5 rounded border border-[#2d3139]">
                         <p class="text-[10px] text-slate-400 uppercase tracking-wider">Account Balance</p>
@@ -110,7 +118,6 @@
                     </div>
                 </div>
 
-                <!-- ប្រអប់បង្ហាញព័ត៌មានកុងសូលលោតសារព្រមាន -->
                 <div class="space-y-2">
                     <p class="text-[10px] text-slate-500 uppercase tracking-wider">System Console Message</p>
                     <div id="regConsole" class="p-3 bg-[#1e2329] text-xs text-slate-400 rounded border border-[#2d3139] font-mono leading-relaxed">
@@ -123,15 +130,12 @@
 
     </main>
 
-    <!-- Footer -->
     <footer class="border-t border-[#2d3139] py-3 text-center text-[10px] text-slate-500 bg-[#12161a]">
         © 2026 BYBIT STYLE CLOUD TERMINAL BRIDGE. ALL RIGHTS RESERVED.
     </footer>
 
     <script>
         let eaActive = 1;
-        const myAccount = "105875038";
-        const myServer = "Exness-MT5Real15";
 
         function toggleEA() {
             const btn = document.getElementById('eaToggle');
@@ -189,6 +193,7 @@
             const accId = document.getElementById('accId').value;
             const password_mt5 = document.getElementById('password_mt5').value;
             const server = document.getElementById('server').value;
+            const platform = document.getElementById('platform').value; // ទាញយកតម្លៃ MT4 ឬ MT5 ពីវិបសាយ
             const lotSize = parseFloat(document.getElementById('lotSize').value);
             const tp_usd = parseFloat(document.getElementById('tp_usd').value);
             const sl_usd = parseFloat(document.getElementById('sl_usd').value);
@@ -196,7 +201,7 @@
             fetch('/api/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ accId, password_mt5, server, lotSize, tp_usd, sl_usd })
+                body: JSON.stringify({ accId, password_mt5, server, platform, lotSize, tp_usd, sl_usd })
             })
             .then(res => res.json())
             .then(data => {
