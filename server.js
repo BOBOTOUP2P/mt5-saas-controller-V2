@@ -10,7 +10,7 @@ app.use(express.static('public'));
 let dbConnected = false;
 let apiConnected = false;
 
-// ១. តភ្ជាប់ទៅកាន់ Database MongoDB (ប្រើប្រាស់តែ ១ គត់ជារៀងរហូត)
+// ១. តភ្ជាប់ទៅកាន់ MongoDB Database
 const MONGO_URI = "mongodb+srv://nna617014_db_user:HcihqVABHE4BLqSL@cluster0.iwa7tts.mongodb.net/?appName=Cluster0";
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => {
@@ -41,28 +41,43 @@ const UserSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', UserSchema);
 
-// ៣. API សម្រាប់សមាជិកចុះឈ្មោះ និងផ្ទៀងផ្ទាត់ (ប្រព័ន្ធ Auto-Clean កូតា Free)
+// ៣. API សម្រាប់សមាជិកចុះឈ្មោះ និងផ្ទៀងផ្ទាត់ (ប្រព័ន្ធឆ្លាតវៃមិនបង្កើតជាន់កូតា)
 app.post('/api/register', async (req, res) => {
     const { accId, password_mt5, server, platform, lotSize, sl_usd, tp_usd } = req.body;
     
     try {
-        // លុបគណនីចាស់ៗទាំងអស់មុនដំឡើងថ្មី ដើម្បីកុំឱ្យស្ទះកូតា Free Tier
         const existingAccounts = await api.metatraderAccountApi.getAccounts();
+        let account = null;
+        
+        // ក្បួនស្វែងរក៖ ប្រសិនបើគណនី Exness ID នេះមានចុះឈ្មោះរួចហើយ គឺយើងមិនបង្កើតថ្មីនាំតែស្ទះកូតាឡើយ
         for (const acc of existingAccounts) {
-            await acc.remove();
-            console.log("លុបគណនីចាស់ចោលជោគជ័យ៖ " + acc.id);
+            if (acc.login == accId) {
+                account = acc;
+                console.log("-> Found existing MetaApi account: " + acc.id);
+                break;
+            }
         }
         
-        // បង្កើតការតភ្ជាប់គណនីថ្មី
-        const account = await api.metatraderAccountApi.createAccount({
-            name: "Client_" + accId,
-            type: 'cloud',
-            login: accId,
-            password: password_mt5,
-            server: server,
-            platform: platform,
-            magic: 555555
-        });
+        // ប្រសិនបើរកមិនឃើញគណនីចាស់ទេ ទើបយើងអនុញ្ញាតឱ្យលុបអាផ្សេង និងបង្កើតថ្មី
+        if (account === null) {
+            // លុបគណនីផ្សេងៗចោលទាំងអស់ដើម្បីឱ្យសល់កូតា Free 1 គណនី
+            for (const acc of existingAccounts) {
+                await acc.remove();
+                console.log("-> Free up slot, removed: " + acc.id);
+            }
+            
+            // បង្កើតការតភ្ជាប់គណនីថ្មី
+            account = await api.metatraderAccountApi.createAccount({
+                name: "Client_" + accId,
+                type: 'cloud',
+                login: accId,
+                password: password_mt5,
+                server: server,
+                platform: platform,
+                magic: 555555
+            });
+            console.log("-> Created new MetaApi account: " + account.id);
+        }
         
         const connection = account.getRPCConnection();
         await connection.connect();
@@ -102,29 +117,33 @@ app.get('/api/status-account/:accId', async (req, res) => {
     let accountConnected = false;
     let balance = "0.00", equity = "0.00";
     
-    const user = await User.findOne({ accId: req.params.accId });
-    
-    if (user) {
-        try {
-            const account = await api.metatraderAccountApi.createAccount({
-                name: "Client_" + user.accId,
-                type: 'cloud',
-                login: user.accId,
-                password: user.password_mt5,
-                server: user.server,
-                platform: user.platform
-            });
-            const connection = account.getRPCConnection();
-            await connection.connect();
-            await connection.waitSynchronized();
+    try {
+        const user = await User.findOne({ accId: req.params.accId });
+        
+        if (user) {
+            const existingAccounts = await api.metatraderAccountApi.getAccounts();
+            let account = null;
             
-            const accountInfo = await connection.getAccountInformation();
-            balance = accountInfo.balance;
-            equity = accountInfo.equity;
-            accountConnected = true;
-        } catch (err) {
-            accountConnected = false;
+            for (const acc of existingAccounts) {
+                if (acc.login == req.params.accId) {
+                    account = acc;
+                    break;
+                }
+            }
+            
+            if (account) {
+                const connection = account.getRPCConnection();
+                await connection.connect();
+                await connection.waitSynchronized();
+                
+                const accountInfo = await connection.getAccountInformation();
+                balance = accountInfo.balance;
+                equity = accountInfo.equity;
+                accountConnected = true;
+            }
         }
+    } catch (err) {
+        accountConnected = false;
     }
 
     res.json({
