@@ -18,12 +18,11 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     dbConnected = true;
 })
 .catch(err => {
-    console.error("Database connection failed", err);
     dbConnected = false;
 });
 
 // ២. តភ្ជាប់ជាមួយ MetaApi Cloud SDK
-const token = "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI4NTU2ZWZkMDM2YmVjZWMwOTUwNWQ3ZmE5ZWNhMzNlZiIsImFjY2Vzc1J1bGVzIjpbeyJpZCI6InRyYWRpbmctYWNjb3VudC1tYW5hZ2VtZW50LWFwaSIsIm1ldGhvZHMiOlsidHJhZGluZy1hY2NvdW50LW1hbmFnZW1lbnQtYXBpOnJlc3Q6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6Im1ldGFhcGktcmVzdC1hcGkiLCJtZXRob2RzIjpbIm1ldGFhcGktYXBpOnJlc3Q6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6Im1ldGFhcGktcnBjLWFwaSIsIm1ldGhvZHMiOlsibWV0YWFwaS1hcGk6d3M6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6Im1ldGFhcGktcmVhbC10aW1lLXN0cmVhbWluZy1hcGkiLCJtZXRob2RzIjpbIm1ldGFhcGktYXBpOndzOnB1YmxpYzoqOioiXSwicm9sZXMiOlsicmVhZGVyIiwid3JpdGVyIl0sInJlc291cmNlcyI6WyIqOiRVU0VSX0lEJDoqIl19LHsiaWQiOiJtZXRhc3RhdHMtYXBpIiwibWV0aG9kcyI6WyJtZXRhc3RhdHMtYXBpOnJlc3Q6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6InJpc2stbWFuYWdlbWVudC1hcGkiLCJtZXRob2RzIjpbInJpc2stbWFuYWdlbWVudC1hcGk6cmVzdDpwdWJsaWM6KjoqIl0sInJvbGVzIjpbInJlYWRlciIsIndyaXRlciJdLCJyZXNvdXJjZXMiOlsiKjokVVNFUl9JRCQ6KiJdfSx7ImlkIjoiY29weWZhY3RvcnktYXBpIiwibWV0aG9kcyI6WyJjb3B5ZmFjdG9yeS1hcGk6cmVzdDpwdWJsaWM6KjoqIl0sInJvbGVzIjpbInJlYWRlciIsIndyaXRlciJdLCJyZXNvdXJjZXMiOlsiKjokVVNFUl9JRCQ6KiJdfSx7ImlkIjoibXQtbWFuYWdlci1hcGkiLCJtZXRob2RzIjpbIm10LW1hbmFnZXItYXBpOnJlc3Q6ZGVhbGluZzoqOioiLCJtdC1tYW5hZ2VyLWFwaTpyZXN0OnB1YmxpYzoqOioiXSwicm9sZXMiOlsicmVhZGVyIiwid3JpdGVyIl0sInJlc291cmNlcyI6WyIqOiRVU0VSX0lEJDoqIl19LHsiaWQiOiJiaWxsaW5nLWFwaSIsIm1ldGhvZHMiOlsiYmlsbGluZy1hcGk6cmVzdDpwdWJsaWM6KjoqIl0sInJvbGVzIjpbInJlYWRlciJdLCJyZXNvdXJjZXMiOlsiKjokVVNFUl9JRCQ6KiJdfV0sImlnbm9yZVJhdGVMaW1pdHMiOmZhbHNlLCJ0b2tlbklkIjoiMjAyMTAyMTMiLCJpbXBlcnNvbmF0ZWQiOmZhbHNlLCJyZWFsVXNlcklkIjoiODU1NmVmZDAzNmJlY2VjMDk1MDVkN2ZhOWVjYTMzZWYiLCJpYXQiOjE3ODUzNDA4ODl9.JHjSxBZOB9eDGuoHrmOB46_YTHJbbrnFNsIzm7nnrq_f3KazJ3fzTQ0WSeuuQbc5mE3y9gd95LlQHJpV6ac6Fpy4UxltBArSkZmf0OfPbzZo7N8LTN0wtD8ZsnmVrgdeYehFEf0mrjNJXxANXMgUd__TKUm-x_qWeG3k6LvVPzZR9TObxwIZVlGscVM9bIbrEZrFSpFeUw02ymkIX8Yxr6qWw5VthRu-QA2p1e3L9d_T8hcVKoubLtGgFo2lXLt2rGkxhtrbWivA32OvDZ5-nWM_4bOuT5ftG5nL6LtQzkSR5oDTWX8l-gRr2lea6INjLVNdyizCF6_MDbYL9o4pgJSB6lN9DftkHVldxryD_aXJzNGla73KbRqzNGbkpKA97jgTLSGEwo8KasI00x5Ez6WbDgpC3qBjUtKxJMLos_RPPlrP-1kQbyjdlkXz1UEZU_gwNMiZp5whJX668__L_JtlMyVq7kttLtMBpRd-lbziT6q91SO6Gu4oFGi1IfMlHFgr7PmWkDNXY23YK1z4SeNdXh4nXrvTxUCKi8J6w0chD1rd83dDG_mgp2BM-k2J-WuouK-5zYPafikRJLRtFUX28GxhVlakyWyHaczg8Em0vTBesz3mWnOWRcL7mmMoK7eC58IQ4LsW0E1K7gchW0G-XuX9fU75y5cabBWSsj4";
+const token = "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI4NTU2ZWZkMDM2YmVjZWMwOTUwNWQ3ZmE5ZWNhMzNlZiIsImFjY2Vzc1J1bGVzIjpbeyJpZCI6InRyYWRpbmctYWNjb3VudC1tYW5hZ2VtZW50LWFwaSIsIm1ldGhvZHMiOlsidHJhZGluZy1hY2NvdW50LW1hbmFnZW1lbnQtYXBpOnJlc3Q6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6Im1ldGFhcGktcmVzdC1hcGkiLCJtZXRob2RzIjpbIm1ldGFhcGktYXBpOnJlc3Q6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6Im1ldGFhcGktcnBjLWFwaSIsIm1ldGhvZHMiOlsibWV0YWFwaS1hcGk6d3M6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6Im1ldGFhcGktcmVhbC10aW1lLXN0cmVhbWluZy1hcGkiLCJtZXRob2RzIjpbIm1ldGFhcGktYXBpOndzOnB1YmxpYzoqOioiXSwicm9sZXMiOlsicmVhZGVyIiwid3JiterIl0sInJlc291cmNlcyI6WyIqOiRVU0VSX0lEJDoqIl19LHsiaWQiOiJtZXRhc3RhdHMtYXBpIiwibWV0aG9kcyI6WyJtZXRhc3RhdHMtYXBpOnJlc3Q6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6InJpc2stbWFuYWdlbWVudC1hcGkiLCJtZXRob2RzIjpbInJpc2stbWFuYWdlbWVudC1hcGk6cmVzdDpwdWJsaWM6KjoqIl0sInJvbGVzIjpbInJlYWRlciIsIndyaXRlciJdLCJyZXNvdXJjZXMiOlsiKjokVVNFUl9JRCQ6KiJdfSx7ImlkIjoiY29weWZhY3RvcnktYXBpIiwibWV0aG9kcyI6WyJjb3B5ZmFjdG9yeS1hcGk6cmVzdDpwdWJsaWM6KjoqIl0sInJvbGVzIjpbInJlYWRlciIsIndyaXRlciJdLCJyZXNvdXJjZXMiOlsiKjokVVNFUl9JRCQ6KiJdfSx7ImlkIjoibXQtbWFuYWdlci1hcGkiLCJtZXRob2RzIjpbIm10LW1hbmFnZXItYXBpOnJlc3Q6ZGVhbGluZzoqOioiLCJtdC1tYW5hZ2VyLWFwaTpyZXN0OnB1YmxpYzoqOioiXSwicm9sZXMiOlsicmVhZGVyIiwid3JpdGVyIl0sInJlc291cmNlcyI6WyIqOiRVU0VSX0lEJDoqIl19LHsiaWQiOiJiaWxsaW5nLWFwaSIsIm1ldGhvZHMiOlsiYmlsbGluZy1hcGk6cmVzdDpwdWJsaWM6KjoqIl0sInJvbGVzIjpbInJlYWRlciJdLCJyZXNvdXJjZXMiOlsiKjokVVNFUl9JRCQ6KiJdfV0sImlnbm9yZVJhdGVMaW1pdHMiOmZhbHNlLCJ0b2tlbklkIjoiMjAyMTAyMTMiLCJpbXBlcnNvbmF0ZWQiOmZhbHNlLCJyZWFsVXNlcklkIjoiODU1NmVmZDAzNmJlY2VjMDk1MDVkN2ZhOWVjYTMzZWYiLCJpYXQiOjE3ODUzNDA4ODl9.JHjSxBZOB9eDGuoHrmOB46_YTHJbbrnFNsIzm7nnrq_f3KazJ3fzTQ0WSeuuQbc5mE3y9gd95LlQHJpV6ac6Fpy4UxltBArSkZmf0OfPbzZo7N8LTN0wtD8ZsnmVrgdeYehFEf0mrjNJXxANXMgUd__TKUm-x_qWeG3k6LvVPzZR9TObxwIZVlGscVM9bIbrEZrFSpFeUw02ymkIX8Yxr6qWw5VthRu-QA2p1e3L9d_T8hcVKoubLtGgFo2lXLt2rGkxhtrbWivA32OvDZ5-nWM_4bOuT5ftG5nL6LtQzkSR5oDTWX8l-gRr2lea6INjLVNdyizCF6_MDbYL9o4pgJSB6lN9DftkHVldxryD_aXJzNGla73KbRqzNGbkpKA97jgTLSGEwo8KasI00x5Ez6WbDgpC3qBjUtKxJMLos_RPPlrP-1kQbyjdlkXz1UEZU_gwNMiZp5whJX668__L_JtlMyVq7kttLtMBpRd-lbziT6q91SO6Gu4oFGi1IfMlHFgr7PmWkDNXY23YK1z4SeNdXh4nXrvTxUCKi8J6w0chD1rd83dDG_mgp2BM-k2J-WuouK-5zYPafikRJLRtFUX28GxhVlakyWyHaczg8Em0vTBesz3mWnOWRcL7mmMoK7eC58IQ4LsW0E1K7gchW0G-XuX9fU75y5cabBWSsj4";
 const api = new MetaApi(token);
 
 // ពិនិត្យស្ថានភាព MetaApi Token ពេលបើក Server
@@ -31,9 +30,9 @@ api.metatraderAccountApi.getAccounts()
 .then(() => { apiConnected = true; })
 .catch(() => { apiConnected = false; });
 
+// បង្កើតរចនាសម្ព័ន្ធរក្សាទុកគណនី (លុបចោល Username)
 const UserSchema = new mongoose.Schema({
-    username: String,
-    accId: String,
+    accId: { type: String, unique: true }, // ប្រើប្រាស់លេខគណនី Exness ធ្វើជាសោរសម្គាល់តែមួយគត់
     password_mt5: String,
     server: String,
     lotSize: Number,
@@ -45,12 +44,11 @@ const User = mongoose.model('User', UserSchema);
 
 // ៣. API សម្រាប់សមាជិកចុះឈ្មោះ និងផ្ទៀងផ្ទាត់ការតភ្ជាប់ Exness ភ្លាមៗ
 app.post('/api/register', async (req, res) => {
-    const { username, accId, password_mt5, server, lotSize, sl_usd, tp_usd } = req.body;
+    const { accId, password_mt5, server, lotSize, sl_usd, tp_usd } = req.body;
     
     try {
-        // តេស្តសាកល្បងភ្ជាប់ទៅកាន់ Exness MT5 របស់សមាជិកជាមុនសិន
         const account = await api.metatraderAccountApi.createAccount({
-            name: username,
+            name: "Client_" + accId,
             type: 'cloud',
             login: accId,
             password: password_mt5,
@@ -62,29 +60,40 @@ app.post('/api/register', async (req, res) => {
         await connection.connect();
         await connection.waitSynchronized();
         
-        // បើតភ្ជាប់បានជោគជ័យ ទើបអនុញ្ញាតឱ្យរក្សាទុកក្នុង Database របស់សហគមន៍
-        const newUser = new User({
-            username, accId, password_mt5, server, lotSize, sl_usd, tp_usd, active: true
-        });
-        await newUser.save();
-        res.json({ success: true, message: "ជោគជ័យ៖ គណនីសហគមន៍របស់អ្នកត្រូវបានចុះឈ្មោះ និងដំណើរការត្រេដអូតូជោគជ័យ!" });
+        // បើតភ្ជាប់ជោគជ័យ ទើបអនុញ្ញាតឱ្យរក្សាទុកក្នុង Database
+        // ប្រើប្រាស់ findOneAndUpdate ដើម្បីបើសមាជិកចុះឈ្មោះម្តងទៀត វានឹង Update ព័ត៌មានថ្មីចូលភ្លាម
+        await User.findOneAndUpdate(
+            { accId: accId },
+            { accId, password_mt5, server, lotSize, sl_usd, tp_usd, active: true },
+            { upsert: true, new: true }
+        );
+
+        res.json({ success: true, message: "ជោគជ័យ៖ គណនី Exness របស់អ្នកត្រូវបានតភ្ជាប់ទៅកាន់ Cloud ជោគជ័យ!" });
         
     } catch (err) {
         res.json({ success: false, message: "ការតភ្ជាប់ទៅ Exness បរាជ័យ៖ " + err.message });
     }
 });
 
-// ៤. API សម្រាប់ទាញយកស្ថានភាពរួម ( Database, API, and Account)
-app.get('/api/status/:username', async (req, res) => {
+// ៤. API សម្រាប់ទាញយកស្ថានភាពស្ពានតភ្ជាប់ទូទៅ (Database & MetaApi)
+app.get('/api/status-general', (req, res) => {
+    res.json({
+        db: dbConnected,
+        api: apiConnected
+    });
+});
+
+// ៥. API សម្រាប់ទាញយកស្ថានភាពគណនី Exness ជាក់ស្តែង
+app.get('/api/status-account/:accId', async (req, res) => {
     let accountConnected = false;
     let balance = "0.00", equity = "0.00";
     
-    const user = await User.findOne({ username: req.params.username });
+    const user = await User.findOne({ accId: req.params.accId });
     
     if (user) {
         try {
             const account = await api.metatraderAccountApi.createAccount({
-                name: user.username,
+                name: "Client_" + user.accId,
                 type: 'cloud',
                 login: user.accId,
                 password: user.password_mt5,
@@ -105,8 +114,6 @@ app.get('/api/status/:username', async (req, res) => {
     }
 
     res.json({
-        db: dbConnected,
-        api: apiConnected,
         account: accountConnected,
         balance: balance,
         equity: equity
