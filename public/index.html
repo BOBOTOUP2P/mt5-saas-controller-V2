@@ -3,112 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaaS Auto-Trading Dashboard</title>
+    <title>Bybit Style Cloud Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet">
-    <style> body { font-family: 'Kantumruy Pro', sans-serif; } </style>
+    <style> 
+        body { 
+            font-family: 'Kantumruy Pro', sans-serif; 
+            background-color: #0b0e11; /* ពណ៌ខ្មៅក្រម៉ៅរបស់ Bybit */
+        } 
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen">
+<body class="text-[#e7ebed] min-h-screen flex flex-col justify-between">
     
-    <header class="border-b border-slate-900 bg-slate-900/50 backdrop-blur py-4 px-6 text-center">
-        <h1 class="text-xl font-bold text-emerald-400">🏆 COOP SMART AUTO-TRADING SYSTEM</h1>
+    <!-- Top Navigation (របារខាងលើបែប Bybit) -->
+    <header class="border-b border-[#2d3139] bg-[#12161a] py-3 px-6">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2">
+                <span class="text-[#ffb11a] text-xl font-bold tracking-wider">BYBIT</span>
+                <span class="text-slate-400 text-xs border-l border-slate-700 pl-2">CLOUD TERMINAL</span>
+            </div>
+            <!-- ភ្លើងសញ្ញាតភ្ជាប់ទាំង ៣ បែបបង្រួមតូចសាមញ្ញ -->
+            <div class="flex flex-wrap gap-4 text-[11px] text-slate-400 font-mono">
+                <div class="flex items-center gap-1.5 bg-[#1e2329] px-2.5 py-1 rounded border border-[#2d3139]">
+                    <span id="dbLight" class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></span>
+                    <span id="dbText">DB: CONNECTING...</span>
+                </div>
+                <div class="flex items-center gap-1.5 bg-[#1e2329] px-2.5 py-1 rounded border border-[#2d3139]">
+                    <span id="apiLight" class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></span>
+                    <span id="apiText">API: CONNECTING...</span>
+                </div>
+                <div class="flex items-center gap-1.5 bg-[#1e2329] px-2.5 py-1 rounded border border-[#2d3139]">
+                    <span id="accLight" class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></span>
+                    <span id="accText">ACC: AWAITING...</span>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <main class="max-w-4xl mx-auto p-6 space-y-6">
+    <!-- Main Workspace -->
+    <main class="flex-grow max-w-5xl mx-auto w-full p-4 lg:p-6 space-y-4">
         
-        <!-- ប្រអប់បង្ហាញភ្លើងសញ្ញាតភ្ជាប់ទាំង ៣ (Triple Status Lights) -->
-        <div class="bg-slate-900/60 border border-slate-900 p-6 rounded-2xl shadow-xl">
-            <h2 class="text-md font-semibold text-slate-300 mb-4 border-b border-slate-800 pb-2">🚦 ស្ថានភាពស្ពានតភ្ជាប់ប្រព័ន្ធ (Connection Status)</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="flex items-center gap-3 p-3 bg-slate-950 rounded-xl border border-slate-900">
-                    <span id="dbLight" class="w-3.5 h-3.5 rounded-full bg-yellow-500 animate-pulse"></span>
-                    <span class="text-xs text-slate-400 font-semibold" id="dbText">Database: កំពុងតភ្ជាប់...</span>
-                </div>
-                <div class="flex items-center gap-3 p-3 bg-slate-950 rounded-xl border border-slate-900">
-                    <span id="apiLight" class="w-3.5 h-3.5 rounded-full bg-yellow-500 animate-pulse"></span>
-                    <span class="text-xs text-slate-400 font-semibold" id="apiText">Cloud API: កំពុងតភ្ជាប់...</span>
-                </div>
-                <div class="flex items-center gap-3 p-3 bg-slate-950 rounded-xl border border-slate-900">
-                    <span id="accLight" class="w-3.5 h-3.5 rounded-full bg-yellow-500 animate-pulse"></span>
-                    <span class="text-xs text-slate-400 font-semibold" id="accText">Exness Account: រង់ចាំការភ្ជាប់...</span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- ផ្ទាំងចុះឈ្មោះសមាជិកថ្មី (Exness MT5 Connection) -->
-        <div class="bg-slate-900/60 border border-slate-900 p-6 rounded-2xl shadow-xl">
-            <h2 class="text-lg font-semibold text-slate-300 mb-4 border-b border-slate-800 pb-2">📝 ចុះឈ្មោះគណនីត្រេដថ្មី</h2>
-            <div id="regConsole" class="hidden mb-4 p-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl text-xs"></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm text-slate-400 mb-1">លេខគណនី Exness MT5 (Login ID)</label>
-                    <input type="text" id="accId" value="105875038" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-300 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm text-slate-400 mb-1">លេខសម្ងាត់ Exness (Trading Password)</label>
-                    <input type="password" id="password_mt5" value="Id168169$" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-300 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm text-slate-400 mb-1">ម៉ាស៊ីនបម្រើ (Broker Server)</label>
-                    <input type="text" id="server" value="Exness-MT5Real15" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-300 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm text-slate-400 mb-1">Lot Size របស់ខ្លួនឯង</label>
-                    <input type="number" id="lotSize" value="0.01" step="0.01" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-300 focus:outline-none">
-                </div>
-                <div class="grid grid-cols-2 gap-2 md:col-span-2">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            
+            <!-- ប្លុកកំណត់ Exness (Left Column) -->
+            <div class="bg-[#12161a] border border-[#2d3139] p-5 rounded-lg space-y-4 shadow-lg">
+                <h2 class="text-xs font-bold text-[#ffb11a] uppercase tracking-wider border-b border-[#2d3139] pb-2">🔑 EXNESS ACCOUNT</h2>
+                
+                <div class="space-y-3 text-xs">
                     <div>
-                        <label class="block text-xs text-slate-500 mb-1">កាត់ចំណេញ TP ($)</label>
-                        <input type="number" id="tp_usd" value="0.65" step="0.01" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-emerald-400 font-bold focus:outline-none">
+                        <label class="block text-slate-400 mb-1">លេខគណនី (Login ID)</label>
+                        <input type="text" id="accId" value="105875038" class="w-full bg-[#1e2329] border border-[#2d3139] rounded px-3 py-2 text-[#ffb11a] focus:outline-none focus:border-[#ffb11a] transition-all">
                     </div>
                     <div>
-                        <label class="block text-xs text-slate-500 mb-1">កាត់ខាត SL ($)</label>
-                        <input type="number" id="sl_usd" value="5.00" step="0.1" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-rose-400 font-bold focus:outline-none">
+                        <label class="block text-slate-400 mb-1">លេខសម្ងាត់ (Trading Password)</label>
+                        <input type="password" id="password_mt5" value="Id168169$" class="w-full bg-[#1e2329] border border-[#2d3139] rounded px-3 py-2 text-slate-300 focus:outline-none focus:border-[#ffb11a] transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">ម៉ាស៊ីនបម្រើ (Broker Server)</label>
+                        <input type="text" id="server" value="Exness-MT5Real15" class="w-full bg-[#1e2329] border border-[#2d3139] rounded px-3 py-2 text-slate-300 focus:outline-none focus:border-[#ffb11a] transition-all">
                     </div>
                 </div>
-            </div>
-            <button id="regBtn" onclick="registerAccount()" class="w-full mt-6 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-xl transition-all">🚀 ចុះឈ្មោះ និងតភ្ជាប់ទៅ Cloud</button>
-        </div>
 
-        <!-- ផ្ទាំងបង្ហាញសមតុល្យលុយ (Real-time Balance/Equity Panel) -->
-        <div class="bg-slate-900/60 border border-slate-900 p-6 rounded-2xl shadow-xl">
-            <h2 class="text-lg font-semibold text-slate-300 mb-4 border-b border-slate-800 pb-2">📊 សមតុល្យគណនីបច្ចុប្បន្ន (Balance & Equity)</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="p-4 bg-slate-950 border border-slate-900 rounded-xl">
-                    <p class="text-xs text-slate-500">សមតុល្យ (Balance)</p>
-                    <h3 id="balVal" class="text-2xl font-bold text-slate-100">$0.00</h3>
+                <h2 class="text-xs font-bold text-[#ffb11a] uppercase tracking-wider border-b border-[#2d3139] pt-2 pb-2">⚙️ TRADING PARAMETERS</h2>
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="block text-slate-400 mb-1">Lot Size</label>
+                        <input type="number" id="lotSize" value="0.01" step="0.01" class="w-full bg-[#1e2329] border border-[#2d3139] rounded px-3 py-1.5 text-slate-300 focus:outline-none focus:border-[#ffb11a]">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">Spread Points</label>
+                        <input type="number" id="spread" value="500" class="w-full bg-[#1e2329] border border-[#2d3139] rounded px-3 py-1.5 text-slate-300 focus:outline-none focus:border-[#ffb11a]">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">កាត់ចំណេញ TP ($)</label>
+                        <input type="number" id="tp_usd" value="0.65" step="0.01" class="w-full bg-[#1e2329] border border-[#2d3139] rounded px-3 py-1.5 text-[#03c087] font-bold focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">កាត់ខាត SL ($)</label>
+                        <input type="number" id="sl_usd" value="5.00" step="0.1" class="w-full bg-[#1e2329] border border-[#2d3139] rounded px-3 py-1.5 text-[#f6465d] font-bold focus:outline-none">
+                    </div>
                 </div>
-                <div class="p-4 bg-slate-950 border border-slate-900 rounded-xl">
-                    <p class="text-xs text-slate-500">ទ្រព្យសកម្ម (Equity)</p>
-                    <h3 id="eqVal" class="text-2xl font-bold text-emerald-400">$0.00</h3>
+
+                <div class="pt-2 flex justify-between items-center text-xs">
+                    <span class="text-slate-400">ស្ថានភាព EA៖</span>
+                    <button id="eaToggle" onclick="toggleEA()" class="bg-[#03c087]/10 text-[#03c087] border border-[#03c087]/20 px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider">ACTIVE</button>
+                </div>
+
+                <button id="regBtn" onclick="registerAccount()" class="w-full bg-[#ffb11a] hover:bg-[#e09600] text-black font-bold py-2.5 rounded text-xs uppercase tracking-wider transition-all transform active:scale-[0.98]">
+                    🚀 CONNECT & AUTO-TRADE
+                </button>
+            </div>
+
+            <!-- ប្លុកសមតុល្យលុយពិត (Right Column - Balance) -->
+            <div class="lg:col-span-2 bg-[#12161a] border border-[#2d3139] p-5 rounded-lg flex flex-col justify-between shadow-lg">
+                <h2 class="text-xs font-bold text-[#ffb11a] uppercase tracking-wider border-b border-[#2d3139] pb-2">📈 ACCOUNT OVERVIEW (REAL-TIME)</h2>
+                
+                <!-- តារាងសមតុល្យបែបសាមញ្ញ មុតស្រួច -->
+                <div class="grid grid-cols-2 gap-4 my-6">
+                    <div class="bg-[#1e2329] p-5 rounded border border-[#2d3139]">
+                        <p class="text-[10px] text-slate-400 uppercase tracking-wider">Account Balance</p>
+                        <h3 id="balVal" class="text-2xl sm:text-3xl font-bold text-slate-100 mt-2 font-mono">$0.00</h3>
+                    </div>
+                    <div class="bg-[#1e2329] p-5 rounded border border-[#2d3139]">
+                        <p class="text-[10px] text-[#03c087] uppercase tracking-wider">Account Equity</p>
+                        <h3 id="eqVal" class="text-2xl sm:text-3xl font-bold text-[#03c087] mt-2 font-mono">$0.00</h3>
+                    </div>
+                </div>
+
+                <!-- ប្រអប់បង្ហាញព័ត៌មានកុងសូលលោតសារព្រមាន -->
+                <div class="space-y-2">
+                    <p class="text-[10px] text-slate-500 uppercase tracking-wider">System Console Message</p>
+                    <div id="regConsole" class="p-3 bg-[#1e2329] text-xs text-slate-400 rounded border border-[#2d3139] font-mono leading-relaxed">
+                        ប្រព័ន្ធកំពុងរង់ចាំការបញ្ជាតភ្ជាប់ពីលោកអ្នក...
+                    </div>
                 </div>
             </div>
+
         </div>
 
     </main>
 
+    <!-- Footer -->
+    <footer class="border-t border-[#2d3139] py-3 text-center text-[10px] text-slate-500 bg-[#12161a]">
+        © 2026 BYBIT STYLE CLOUD TERMINAL BRIDGE. ALL RIGHTS RESERVED.
+    </footer>
+
     <script>
+        let eaActive = 1;
+        const myAccount = "105875038";
+        const myServer = "Exness-MT5Real15";
+
+        function toggleEA() {
+            const btn = document.getElementById('eaToggle');
+            if (eaActive === 1) { 
+                eaActive = 0; 
+                btn.innerText = "DISABLED"; 
+                btn.className = "bg-[#f6465d]/10 text-[#f6465d] border border-[#f6465d]/20 px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider"; 
+            } else { 
+                eaActive = 1; 
+                btn.innerText = "ACTIVE"; 
+                btn.className = "bg-[#03c087]/10 text-[#03c087] border border-[#03c087]/20 px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider"; 
+            }
+        }
+
         function updateStatusLight(elementId, textId, name, isConnected) {
             const light = document.getElementById(elementId);
             const text = document.getElementById(textId);
             if(isConnected) {
-                light.className = "w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50";
-                text.innerText = `${name}: ជោគជ័យ`;
-                text.className = "text-xs text-emerald-400 font-semibold";
+                light.className = "w-2 h-2 rounded-full bg-[#03c087] shadow-lg shadow-[#03c087]/50";
+                text.innerText = `${name}: ACTIVE`;
+                text.className = "text-[#03c087]";
             } else {
-                light.className = "w-3.5 h-3.5 rounded-full bg-rose-500 shadow-lg shadow-rose-500/50 animate-pulse";
-                text.innerText = `${name}: បរាជ័យ`;
-                text.className = "text-xs text-rose-500 font-semibold";
+                light.className = "w-2 h-2 rounded-full bg-[#f6465d] shadow-lg shadow-[#f6465d]/50 animate-pulse";
+                text.innerText = `${name}: FAILED`;
+                text.className = "text-[#f6465d]";
             }
         }
 
-        // មុខងារហៅស្កែនរកភ្លើងសញ្ញាទូទៅ (Database & Cloud API) ភ្លាមៗពេលបើកវិបសាយដំបូង
         function fetchGeneralStatus() {
             fetch('/api/status-general')
             .then(res => res.json())
             .then(data => {
-                updateStatusLight('dbLight', 'dbText', 'Database', data.db);
-                updateStatusLight('apiLight', 'apiText', 'Cloud API', data.api);
+                updateStatusLight('dbLight', 'dbText', 'DB', data.db);
+                updateStatusLight('apiLight', 'apiText', 'API', data.api);
             });
         }
         
@@ -121,14 +178,13 @@
             const accLight = document.getElementById('accLight');
             const accText = document.getElementById('accText');
             
-            regBtn.innerText = "កំពុងផ្ទៀងផ្ទាត់ និងតភ្ជាប់ទៅ Exness... (សូមរង់ចាំ)";
+            regBtn.innerText = "VERIFYING & CONNECTING TO EXNESS...";
             regBtn.disabled = true;
-            regConsole.classList.remove('hidden');
-            regConsole.innerText = "ប្រព័ន្ធកំពុងធ្វើការតភ្ជាប់ទៅកាន់ម៉ាស៊ីនមេ Exness ដើម្បីផ្ទៀងផ្ទាត់គណនីរបស់អ្នក...";
+            regConsole.innerText = "[SYSTEM] Connecting to Exness server to authorize credentials...";
             
-            accLight.className = "w-3.5 h-3.5 rounded-full bg-yellow-500 animate-pulse";
-            accText.innerText = "Exness Account: កំពុងតភ្ជាប់...";
-            accText.className = "text-xs text-yellow-500 font-semibold";
+            accLight.className = "w-2 h-2 rounded-full bg-yellow-500 animate-pulse";
+            accText.innerText = "ACC: CONNECTING...";
+            accText.className = "text-yellow-500";
 
             const accId = document.getElementById('accId').value;
             const password_mt5 = document.getElementById('password_mt5').value;
@@ -144,29 +200,23 @@
             })
             .then(res => res.json())
             .then(data => {
-                regBtn.innerText = "🚀 ចុះឈ្មោះ និងតភ្ជាប់ទៅ Cloud";
+                regBtn.innerText = "🚀 CONNECT & AUTO-TRADE";
                 regBtn.disabled = false;
                 if(data.success) {
-                    regConsole.className = "mb-4 p-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl text-xs";
-                    regConsole.innerText = data.message;
-                    
-                    // បង្ហាញសមតុល្យលុយពិតភ្លាមៗ
+                    regConsole.innerText = `[SUCCESS] ${data.message}`;
                     document.getElementById('balVal').innerText = `$${parseFloat(data.balance).toFixed(2)}`;
                     document.getElementById('eqVal').innerText = `$${parseFloat(data.equity).toFixed(2)}`;
-                    
-                    updateStatusLight('accLight', 'accText', 'Exness Account', true);
+                    updateStatusLight('accLight', 'accText', 'ACC', true);
                 } else {
-                    regConsole.className = "mb-4 p-3 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-xl text-xs";
-                    regConsole.innerText = data.message;
-                    updateStatusLight('accLight', 'accText', 'Exness Account', false);
+                    regConsole.innerText = `[ERROR] ${data.message}`;
+                    updateStatusLight('accLight', 'accText', 'ACC', false);
                 }
             })
             .catch(err => {
-                regBtn.innerText = "🚀 ចុះឈ្មោះ និងតភ្ជាប់ទៅ Cloud";
+                regBtn.innerText = "🚀 CONNECT & AUTO-TRADE";
                 regBtn.disabled = false;
-                regConsole.className = "mb-4 p-3 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-xl text-xs";
-                regConsole.innerText = "កំហុសបច្ចេកទេស៖ ការតភ្ជាប់ទៅកាន់ Server របស់ Render មានបញ្ហា!";
-                updateStatusLight('accLight', 'accText', 'Exness Account', false);
+                regConsole.innerText = "[ERROR] Connection failed to Render Cloud Server!";
+                updateStatusLight('accLight', 'accText', 'ACC', false);
             });
         }
     </script>
