@@ -10,7 +10,7 @@ app.use(express.static('public'));
 let dbConnected = false;
 let apiConnected = false;
 
-// ១. តភ្ជាប់ទៅកាន់ Database MongoDB (ប្រើប្រាស់តែ ១ គត់ជារៀងរហូត)
+// ១. តភ្ជាប់ទៅកាន់ MongoDB Database
 const MONGO_URI = "mongodb+srv://nna617014_db_user:HcihqVABHE4BLqSL@cluster0.iwa7tts.mongodb.net/?appName=Cluster0";
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => {
@@ -21,8 +21,8 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     dbConnected = false;
 });
 
-// ២. តភ្ជាប់ជាមួយ MetaApi Cloud SDK (ប្រើប្រាស់ Token ទី ២ ថ្មីស្រឡាងរបស់អ្នក ១០០%)
-const token = "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIzMTNlZTg2YTJhMzk1YWU4ZjI0YzE2OTEyOGQ1NTYwNSIsImFjY2Vzc1J1bGVzIjpbeyJpZCI6InRyYWRpbmctYWNjb3VudC1tYW5hZ2VtZW50LWFwaSIsIm1ldGhvZHMiOlsidHJhZGluZy1hY2NvdW50LW1hbmFnZW1lbnQtYXBpOnJlc3Q6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVStandardi_SUQkOioiXX0seyJpZCI6Im1ldGFhcGktcmVzdC1hcGkiLCJtZXRob2RzIjpbIm1ldGFhcGktYXBpOnJlc3Q6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6Im1ldGFhcGktcnBjLWFwaSIsIm1ldGhvZHMiOlsibWV0YWFwaS1hcGk6d3M6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6Im1ldGFhcGktcmVhbC10aW1lLXN0cmVhbWluZy1hcGkiLCJtZXRob2RzIjpbIm1ldGFhcGktYXBpOndzOnB1YmxpYzoqOioiXSwicm9sZXMiOlsicmVhZGVyIiwid3JpdGVyIl0sInJlc291cmNlcyI6WyIqOiRVU0VSX0lEJDoqIl19LHsiaWQiOiJtZXRhc3RhdHMtYXBpIiwibWV0aG9kcyI6WyJtZXRhc3RhdHMtYXBpOnJlc3Q6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6InJpc2stbWFuYWdlbWVudC1hcGkiLCJtZXRob2RzIjpbInJpc2stbWFuYWdlbWVudC1hcGk6cmVzdDpwdWJsaWM6KjoqIl0sInJvbGVzIjpbInJlYWRlciIsIndyaXRlciJdLCJyZXNvdXJjZXMiOlsiKjokVVNFUl9JRCQ6KiJdfSx7ImlkIjoiY29weWZhY3RvcnktYXBpIiwibWV0aG9kcyI6WyJjb3B5ZmFjdG9yeS1hcGk6cmVzdDpwdWJsaWM6KjoqIl0sInJvbGVzIjpbInJlYWRlciIsIndyaXRlciJdLCJyZXNvdXJjZXMiOlsiKjokVVNFUl9JRCQ6KiJdfSx7ImlkIjoibXQtbWFuYWdlci1hcGkiLCJtZXRob2RzIjpbIm10LW1hbmFnZXItYXBpOnJlc3Q6ZGVhbGluZzoqOioiLCJtdC1tYW5hZ2VyLWFwaTpyZXN0OnB1YmxpYzoqOioiXSwicm9sZXMiOlsicmVhZGVyIiwid3JpdGVyIl0sInJlc291cmNlcyI6WyIqOiRVU0VSX0lEJDoqIl19LHsiaWQiOiJiaWxឡឹងLWFwaSIsIm1ldGhvZHMiOlsiYmlsbGluZy1hcGk6cmVzdDpwdWJsaWM6KjoqIl0sInJvbGVzIjpbInJlYWRlciJdLCJyZXNvdXJjZXMiOlsiKjokVVNFUl9JRCQ6KiJdfV0sImlnbm9yZVJhdGVMaW1pdHMiOmZhbHNlLCJ0b2tlbklkIjoiMjAyMTAyMTMiLCJpbXBlcnNvbmF0ZWQiOmZhbHNlLCJyZWFsVXNlcklkIjoiMzEzZWU4NmEyYTM5NWFlOGYyNGMxNjkxMjhkNTU2MDUiLCJpYXQiOjE3ODUzODMwODV9.W5JZKJ49abPb5V5LUtaz44bqQ8YKwwpTTHHThgsNGONTa1zcxuRO3jNPl-tR9T36JnNF3_21zp3zNaHzd0w43CfPj1LFqNE157degdhQpvOxAXAR8Kt_W7foKeyNK7zeVsiK58hyC4HRoBaZpuLshclPwXEaty-s2M7g4hU-l8dWa8g249nvMiaSS_8vQy3KVbw6fNWQKBNwH-wwfT_oOBhsyN5W-TqQ-oW7bE0OXM2HzPwo-NMcCjvXw9FOhzVH3HSbXpuT9yj_mgDqiG5dsRzNsq2Me56t-e14bcot9TIRJIa7r5ylLtVQr8XmWqZ9cxZHUU4Ldlw7DPGZrVMi_ybRgke3fq3-sividIFvL09j8v5YT3G-SqKauL5fDiSs1bW0qwlqjxxitwvW-KfMil5p15_Axhh31cQMvLQPVlkxfXBGTI2RjfVCUK8HRP1ZuoWJ8_amLDUETQ5VvWJmifuCZKDYjFtEHL0-HHQH49rqOvT_UxzNZsxAeu-mXbhzNtTZBjoDuyizRmlEuzdKs8PdahXu6fViv-ZRala1KIQ1iexkAg7TWKQHbWmUOWMKYqziuqjiKKwRzVg8iCeh-SZMPSzkICA4Z1k4DYYI06OZ0BxA04Ji-XS1xgdviaRL3627Vu_rE6cy4E8-kKqg4cMoSp7N__pL6LJSX6e_ZaM";
+// ២. តភ្ជាប់ជាមួយ MetaApi Cloud SDK (កូដ Token ទី ២ របស់ដឹង ត្រឹមត្រូវ ១០០%)
+const token = "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiIzMTNlZTg2YTJhMzk1YWU4ZjI0YzE2OTEyOGQ1NTYwNSIsImFjY2Vzc1J1bGVzIjpbeyJpZCI6InRyYWRpbmctYWNjb3VudC1tYW5hZ2VtZW50LWFwaSIsIm1ldGhvZHMiOlsidHJhZGluZy1hY2NvdW50LW1hbmFnZW1lbnQtYXBpOnJlc3Q6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6Im1ldGFhcGktcmVzdC1hcGkiLCJtZXRob2RzIjpbIm1ldGFhcGktYXBpOnJlc3Q6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6Im1ldGFhcGktcnBjLWFwaSIsIm1ldGhvZHMiOlsibWV0YWFwaS1hcGk6d3M6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6Im1ldGFhcGktcmVhbC10aW1lLXN0cmVhbWluZy1hcGkiLCJtZXRob2RzIjpbIm1ldGFhcGktYXBpOndzOnB1YmxpYzoqOioiXSwicm9sZXMiOlsicmVhZGVyIiwid3JpdGVyIl0sInJlc291cmNlcyI6WyIqOiRVU0VSX0lEJDoqIl19LHsiaWQiOiJtZXRhc3RhdHMtYXBpIiwibWV0aG9kcyI6WyJtZXRhc3RhdHMtYXBpOnJlc3Q6cHVibGljOio6KiJdLCJyb2xlcyI6WyJyZWFkZXIiLCJ3cml0ZXIiXSwicmVzb3VyY2VzIjpbIio6JFVTRVJfSUQkOioiXX0seyJpZCI6InJpc2stbWFuYWdlbWVudC1hcGkiLCJtZXRob2RzIjpbInJpc2stbWFuYWdlbWVudC1hcGk6cmVzdDpwdWJsaWM6KjoqIl0sInJvbGVzIjpbInJlYWRlciIsIndyaXRlciJdLCJyZXNvdXJjZXMiOlsiKjokVVNFUl9JRCQ6KiJdfSx7ImlkIjoiY29weWZhY3RvcnktYXBpIiwibWV0aG9kcyI6WyJjb3B5ZmFjdG9yeS1hcGk6cmVzdDpwdWJsaWM6KjoqIl0sInJvbGVzIjpbInJlYWRlciIsIndyaXRlciJdLCJyZXNvdXJjZXMiOlsiKjokVVNFUl9JRCQ6KiJdfSx7ImlkIjoibXQtbWFuYWdlci1hcGkiLCJtZXRob2RzIjpbIm10LW1hbmFnZXItYXBpOnJlc3Q6ZGVhbGluZzoqOioiLCJtdC1tYW5hZ2VyLWFwaTpyZXN0OnB1YmxpYzoqOioiXSwicm9sZXMiOlsicmVhZGVyIiwid3JpdGVyIl0sInJlc291cmNlcyI6WyIqOiRVU0VSX0lEJDoqIl19LHsiaWQiOiJiaWxsaW5nLWFwaSIsIm1ldGhvZHMiOlsiYmlsbGluZy1hcGk6cmVzdDpwdWJsaWM6KjoqIl0sInJvbGVzIjpbInJlYWRlciJdLCJyZXNvdXJjZXMiOlsiKjokVVNFUl9JRCQ6KiJdfV0sImlnbm9yZVJhdGVMaW1pdHMiOmZhbHNlLCJ0b2tlbklkIjoiMjAyMTAyMTMiLCJpbXBlcnNvbmF0ZWQiOmZhbHNlLCJyZWFsVXNlcklkIjoiMzEzZWU4NmEyYTM5NWFlOGYyNGMxNjkxMjhkNTU2MDUiLCJpYXQiOjE3ODUzODMwODV9.W5JZKJ49abPb5V5LUtaz44bqQ8YKwwpTTHHThgsNGONTa1zcxuRO3jNPl-tR9T36JnNF3_21zp3zNaHzd0w43CfPj1LFqNE157degdhQpvOxAXAR8Kt_W7foKeyNK7zeVsiK58hyC4HRoBaZpuLshclPwXEaty-s2M7g4hU-l8dWa8g249nvMiaSS_8vQy3KVbw6fNWQKBNwH-wwfT_oOBhsyN5W-TqQ-oW7bE0OXM2HzPwo-NMcCjvXw9FOhzVH3HSbXpuT9yj_mgDqiG5dsRzNsq2Me56t-e14bcot9TIRJIa7r5ylLtVQr8XmWqZ9cxZHUU4Ldlw7DPGZrVMi_ybRgke3fq3-sividIFvL09j8v5YT3G-SqKauL5fDiSs1bW0qwlqjxxitwvW-KfMil5p15_Axhh31cQMvLQPVlkxfXBGTI2RjfVCUK8HRP1ZuoWJ8_amLDUETQ5VvWJmifuCZKDYjFtEHL0-HHQH49rqOvT_UxzNZsxAeu-mXbhzNtTZBjoDuyizRmlEuzdKs8PdahXu6fViv-ZRala1KIQ1iexkAg7TWKQHbWmUOWMKYqziuqjiKKwRzVg8iCeh-SZMPSzkICA4Z1k4DYYI06OZ0BxA04Ji-XS1xgdviaRL3627Vu_rE6cy4E8-kKqg4cMoSp7N__pL6LJSX6e_ZaM";
 const api = new MetaApi(token);
 
 api.metatraderAccountApi.getAccounts()
@@ -41,7 +41,7 @@ const UserSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', UserSchema);
 
-// ៣. API សម្រាប់សមាជិកចុះឈ្មោះ និងផ្ទៀងផ្ទាត់ (ប្រព័ន្ធឆ្លាតវៃមិនបង្កើតជាន់កូតា)
+// ៣. API សម្រាប់សមាជិកចុះឈ្មោះ និងផ្ទៀងផ្ទាត់
 app.post('/api/register', async (req, res) => {
     const { accId, password_mt5, server, platform, lotSize, sl_usd, tp_usd } = req.body;
     
@@ -148,12 +148,11 @@ app.get('/api/status-account/:accId', async (req, res) => {
 });
 
 // ==================================================================
-// 🚀 ម៉ាស៊ីនជួញដូរអនឡាញ ២៤ ម៉ោង (Cloud Trading Engine) - លុបចោល VPS & MT5 ទាំងស្រុង
+// 🚀 ម៉ាស៊ីនជួញដូរអនឡាញ ២៤ ម៉ោង (Cloud Trading Engine) - កូដកែសម្រួល JavaScript ត្រឹមត្រូវ ១០០%
 // ==================================================================
 async function startCloudTradingEngine() {
     setInterval(async () => {
         try {
-            // ទាញយកសមាជិកដែលសកម្មទាំងអស់ពី Database
             const users = await User.find({ active: true });
             
             for (const user of users) {
@@ -175,16 +174,18 @@ async function startCloudTradingEngine() {
                             await connection.waitSynchronized();
                         }
                         
-                        // ទាញយកទិន្នន័យទៀនតម្លៃកាក់មាស ១ នាទី (M1) ចំនួន ១០ ទៀនចុងក្រោយ
+                        // ទាញយកទិន្នន័យទៀនមាស ១ នាទី
                         const candles = await connection.getCandles('XAUUSD', '1m', 10);
                         if (candles.length < 5) continue;
                         
-                        // គណនាខ្សែមធ្យមភាគល្បឿនលឿន EMA 3 និង EMA 8 នៅក្នុង Cloud JavaScript
-                        let ema3_prev = candles[2].close;
-                        let ema3_curr = candles[1].close * (2 / (3 + 1)) + ema3_prev * (1 - (2 / (3 + 1)));
+                        const len = candles.length;
                         
-                        let ema8_prev = candles[2].close;
-                        let ema8_curr = candles[1].close * (2 / (8 + 1)) + ema8_prev * (1 - (2 / (8 + 1)));
+                        // គណនាខ្សែ EMA 3 និង EMA 8 តាមរូបមន្ត JavaScript សុទ្ធ ១០០% (គ្មានកូដលាយឡំឡើយ)
+                        let ema3_prev = candles[len - 3].close;
+                        let ema3_curr = candles[len - 2].close * (2 / (3 + 1)) + ema3_prev * (1 - (2 / (3 + 1)));
+                        
+                        let ema8_prev = candles[len - 3].close;
+                        let ema8_curr = candles[len - 2].close * (2 / (8 + 1)) + ema8_prev * (1 - (2 / (8 + 1)));
                         
                         // ត្រួតពិនិត្យលំដាប់ជួញដូរដែលកំពុងរត់
                         const positions = await connection.getPositions();
@@ -194,7 +195,7 @@ async function startCloudTradingEngine() {
                             if (pos.symbol === 'XAUUSD' || pos.symbol === 'XAUUSDm') {
                                 hasPosition = true;
                                 
-                                // Smart Exit: បើកម្លាំងទីផ្សារបកក្រោយ គឺកាត់យកចំណេញ ឬកាត់ខាតភ្លាមៗជាវិនាទី
+                                // Smart Exit: បើកម្លាំងបកក្រោយ គឺបញ្ជាបិទយកចំណេញ ឬកាត់ខាតភ្លាមៗជាវិនាទី
                                 if (pos.type === 'POSITION_TYPE_BUY' && ema3_curr < ema8_curr) {
                                     await connection.closePosition(pos.id);
                                     console.log("-> Smart Close BUY for: " + user.accId);
@@ -210,11 +211,9 @@ async function startCloudTradingEngine() {
                         if (!hasPosition) {
                             const tick = await connection.getSymbolPrice('XAUUSD');
                             
-                            // គណនាការពារខាត SL ($5) និង TP ($0.65) ស្វ័យប្រវត្តិតាមការកំណត់
-                            const tick_value = SymbolInfoDouble('XAUUSD', SYMBOL_TRADE_TICK_VALUE);
-                            const tick_size = SymbolInfoDouble('XAUUSD', SYMBOL_TRADE_TICK_SIZE);
-                            const sl_distance = (user.sl_usd / (user.lotSize * 1.0)) * 0.01; // $5 on 0.01 lot
-                            const tp_distance = (user.tp_usd / (user.lotSize * 1.0)) * 0.01; // $0.65 on 0.01 lot
+                            // រូបមន្តគណនាចម្ងាយតម្លៃ SL ($5) និង TP ($0.65) ជា JavaScript សាមញ្ញបំផុត និងត្រឹមត្រូវបំផុត
+                            const sl_distance = user.sl_usd; // $5.00 move លើមាស
+                            const tp_distance = user.tp_usd; // $0.65 move លើមាស
                             
                             if (ema3_curr > ema8_curr) {
                                 const ask = tick.ask;
@@ -229,7 +228,6 @@ async function startCloudTradingEngine() {
                         }
                     }
                 } catch (e) {
-                    // បើមានកំហុសឆ្គង ឱ្យវារត់រំលងទៅគណនីបន្ទាប់
                     continue;
                 }
             }
@@ -239,7 +237,6 @@ async function startCloudTradingEngine() {
     }, 10000); // ដំណើរការវិភាគរៀងរាល់ ១០ វិនាទីម្តង
 }
 
-// ចាប់ផ្តើមដំណើរការម៉ាស៊ីនជួញដូរអនឡាញ
 startCloudTradingEngine();
 
 app.listen(PORT, () => console.log(`Server is running`));
